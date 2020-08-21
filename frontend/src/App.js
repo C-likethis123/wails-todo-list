@@ -1,20 +1,25 @@
 import React from 'react';
-import logo from './logo.png';
 import './App.css';
-import HelloWorld from './components/HelloWorld';
 
 function App() {
   return (
-    <div id="app" className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Welcome to your new <code>wails/react</code> project.
-        </p>
-
-        <HelloWorld />
-      </header>
-    </div>
+    <div>
+      <section class="todoapp" v-cloak>
+        <header class="header">
+          <h1>todos</h1>
+          <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" />
+        </header>
+        <section class="main">
+          <ul class="todo-list">
+            <li class="todo">
+              <div class="view">
+                <label>A todo item</label>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </section>
+  </div>
   );
 }
 
