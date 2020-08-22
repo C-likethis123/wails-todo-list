@@ -20,11 +20,13 @@ function App() {
         {todos.length > 0 ? (
           <section class="main">
             <ul class="todo-list">
-              <li class="todo">
-                <div class="view">
-                  <label>A todo item</label>
-                </div>
-              </li>
+              {todos.map((todo) => (
+                <li class="todo">
+                  <div class="view">
+                    <label>{ todo.title }</label>
+                  </div>
+                </li>
+              ))}
             </ul>
           </section>
         ) : null}
