@@ -3,8 +3,9 @@ import "./App.css";
 import "./assets/app.css";
 import "./assets/base.css";
 
+import classnames from "classnames";
 function App() {
-  const todos = [];
+  const todos = [{ id: 0, title: "My test to do item", completed: true }];
   return (
     <div>
       <section class="todoapp" v-cloak>
@@ -21,9 +22,14 @@ function App() {
           <section class="main">
             <ul class="todo-list">
               {todos.map((todo) => (
-                <li class="todo">
-                  <div class="view">
-                    <label>{ todo.title }</label>
+                <li
+                  className={classnames({
+                    todo,
+                    completed: todo.completed,
+                  })}
+                >
+                  <div className="view">
+                    <label>{todo.title}</label>
                   </div>
                 </li>
               ))}
