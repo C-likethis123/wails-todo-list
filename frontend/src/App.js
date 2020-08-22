@@ -24,11 +24,18 @@ function App() {
               {todos.map((todo) => (
                 <li
                   className={classnames({
-                    todo,
+                    todo: true,
                     completed: todo.completed,
                   })}
                 >
                   <div className="view">
+                    <input
+                      type="checkbox"
+                      className={classnames({
+                        toggle: true,
+                        completed: todo.completed,
+                      })}
+                    />
                     <label>{todo.title}</label>
                   </div>
                 </li>
