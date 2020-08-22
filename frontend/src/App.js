@@ -4,6 +4,31 @@ import "./assets/app.css";
 import "./assets/base.css";
 
 import classnames from "classnames";
+
+const ToDo = ({ todo }) => {
+  const [completed, setCompleted] = useState(todo.completed);
+  return (
+    <li
+      className={classnames({
+        todo: true,
+        completed,
+      })}
+    >
+      <div className="view">
+        <input
+          type="checkbox"
+          checked={completed}
+          onClick={() => setCompleted(!completed)}
+          className={classnames({
+            toggle: true,
+          })}
+        />
+        <label>{todo.title}</label>
+      </div>
+    </li>
+  );
+};
+
 function App() {
   const todos = [{ id: 0, title: "My test to do item", completed: true }];
   return (
@@ -22,23 +47,7 @@ function App() {
           <section class="main">
             <ul class="todo-list">
               {todos.map((todo) => (
-                <li
-                  className={classnames({
-                    todo: true,
-                    completed: todo.completed,
-                  })}
-                >
-                  <div className="view">
-                    <input
-                      type="checkbox"
-                      className={classnames({
-                        toggle: true,
-                        completed: todo.completed,
-                      })}
-                    />
-                    <label>{todo.title}</label>
-                  </div>
-                </li>
+                <ToDo todo={todo} />
               ))}
             </ul>
           </section>
