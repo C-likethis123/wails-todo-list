@@ -39,9 +39,11 @@ function App() {
       // Add a ToDo to the todos list
       const trimmedValue = newToDo.trim();
       if (trimmedValue) {
+        const lastToDo = todos[todos.length - 1]
+        const lastId = lastToDo.id + 1
         setTodos(
           todos.concat({
-            id: todos.length,
+            id: lastId,
             title: trimmedValue,
             completed: false,
           })
