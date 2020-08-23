@@ -6,10 +6,10 @@ import "./assets/base.css";
 import classnames from "classnames";
 
 const ToDo = ({ todo, removeToDo, editToDo }) => {
-  const [completed, setCompleted] = useState(todo.completed);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(todo.title);
-  const editInputRef = useRef(null);
+  const [completed, setCompleted] = useState(todo.completed)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedTitle, setEditedTitle] = useState(todo.title)
+  const editInputRef = useRef(null)
   const allowEdits = () => {
     setIsEditing(true)
     setTimeout(() => editInputRef.current.focus(), 100)
@@ -43,12 +43,10 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
           onChange={() => setCompleted(!completed)}
           className="toggle"
         />
-        <label
-          onDoubleClick={allowEdits}
-        >
+        <label onDoubleClick={allowEdits}>
           {todo.title}
         </label>
-        <button className="destroy" onClick={() => removeToDo(todo.id)}></button>
+        <button className="destroy" onClick={() => removeToDo(todo.id)} />
       </div>
       <input
         className={classnames({
@@ -120,7 +118,7 @@ function App() {
           <section className="main">
             <ul className="todo-list">
               {todos.map((todo) => (
-                <ToDo todo={todo} removeToDo={removeToDo} editToDo={editToDo}/>
+                <ToDo key={todo.id} todo={todo} removeToDo={removeToDo} editToDo={editToDo} />
               ))}
             </ul>
           </section>
