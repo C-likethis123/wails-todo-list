@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 import "./assets/app.css";
 import "./assets/base.css";
@@ -9,9 +9,13 @@ const ToDo = ({ todo, removeToDo }) => {
   const [completed, setCompleted] = useState(todo.completed);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
+  const editInputRef = useRef(null);
   const editToDo = () => {
     setIsEditing(true)
-   };
+    setTimeout(() => editInputRef.current.focus(), 100)
+  };
+
+
   return (
     <li
       className={classnames({
@@ -24,7 +28,7 @@ const ToDo = ({ todo, removeToDo }) => {
         <input
           type="checkbox"
           checked={completed}
-          onClick={() => setCompleted(!completed)}
+          onChange={() => setCompleted(!completed)}
           className="toggle"
         />
         <label
@@ -39,6 +43,7 @@ const ToDo = ({ todo, removeToDo }) => {
           editing: isEditing,
           edit: true,
         })}
+        ref={editInputRef}
         type="text"
         value={editedTitle}
         onChange={(event) => setEditedTitle(event.target.value)}
@@ -79,13 +84,13 @@ function App() {
 
   return (
     <div>
-      <section class="todoapp" v-cloak>
-        <header class="header">
+      <section className="todoapp">
+        <header className="header">
           <h1>todos</h1>
           <input
             className="new-todo"
-            autofocus
-            autocomplete="off"
+            autoFocus
+            autoComplete="off"
             placeholder="What needs to be done?"
             value={newToDo}
             onChange={(event) => setNewToDo(event.target.value)}
@@ -93,8 +98,8 @@ function App() {
           />
         </header>
         {todos.length > 0 ? (
-          <section class="main">
-            <ul class="todo-list">
+          <section className="main">
+            <ul className="todo-list">
               {todos.map((todo) => (
                 <ToDo todo={todo} removeToDo={removeToDo} />
               ))}
