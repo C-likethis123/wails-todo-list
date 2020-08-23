@@ -5,7 +5,7 @@ import "./assets/base.css";
 
 import classnames from "classnames";
 
-const ToDo = ({ todo, removeToDo }) => {
+const ToDo = ({ todo, removeToDo, editToDo }) => {
   const [completed, setCompleted] = useState(todo.completed);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
@@ -15,6 +15,13 @@ const ToDo = ({ todo, removeToDo }) => {
     setTimeout(() => editInputRef.current.focus(), 100)
   };
 
+  const completeEdit = (event) => {
+    if (event.key === 'Enter') {
+      setIsEditing(false)
+      const trimmedTitle = editedTitle.trim()
+      editToDo(todo, trimmedTitle)
+    }
+  }
 
   return (
     <li
@@ -47,6 +54,7 @@ const ToDo = ({ todo, removeToDo }) => {
         type="text"
         value={editedTitle}
         onChange={(event) => setEditedTitle(event.target.value)}
+        onKeyUp={completeEdit}
       />
     </li>
   );
@@ -82,6 +90,11 @@ function App() {
     setTodos(todos.filter(item => item.id !== todoId))
   }
 
+  const editToDo = (todo, editedTitle) => {
+    todo.title = editedTitle;
+    setTodos(todos)
+  }
+
   return (
     <div>
       <section className="todoapp">
@@ -101,7 +114,7 @@ function App() {
           <section className="main">
             <ul className="todo-list">
               {todos.map((todo) => (
-                <ToDo todo={todo} removeToDo={removeToDo} />
+                <ToDo todo={todo} removeToDo={removeToDo} editToDo={editToDo}/>
               ))}
             </ul>
           </section>
