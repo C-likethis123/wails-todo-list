@@ -7,11 +7,17 @@ import classnames from "classnames";
 
 const ToDo = ({ todo, removeToDo }) => {
   const [completed, setCompleted] = useState(todo.completed);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(todo.title);
+  const editToDo = () => {
+    setIsEditing(true)
+   };
   return (
     <li
       className={classnames({
         todo: true,
         completed,
+        editing: isEditing,
       })}
     >
       <div className="view">
@@ -21,9 +27,22 @@ const ToDo = ({ todo, removeToDo }) => {
           onClick={() => setCompleted(!completed)}
           className="toggle"
         />
-        <label>{todo.title}</label>
+        <label
+          onDoubleClick={() => editToDo()}
+        >
+          {todo.title}
+        </label>
         <button className="destroy" onClick={() => removeToDo(todo.id)}></button>
       </div>
+      <input
+        className={classnames({
+          editing: isEditing,
+          edit: true,
+        })}
+        type="text"
+        value={editedTitle}
+        onChange={(event) => setEditedTitle(event.target.value)}
+      />
     </li>
   );
 };
