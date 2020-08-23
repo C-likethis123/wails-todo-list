@@ -5,7 +5,7 @@ import "./assets/base.css";
 
 import classnames from "classnames";
 
-const ToDo = ({ todo }) => {
+const ToDo = ({ todo, removeToDo }) => {
   const [completed, setCompleted] = useState(todo.completed);
   return (
     <li
@@ -19,11 +19,10 @@ const ToDo = ({ todo }) => {
           type="checkbox"
           checked={completed}
           onClick={() => setCompleted(!completed)}
-          className={classnames({
-            toggle: true,
-          })}
+          className="toggle"
         />
         <label>{todo.title}</label>
+        <button className="destroy" onClick={() => removeToDo(todo.id)}></button>
       </div>
     </li>
   );
