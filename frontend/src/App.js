@@ -23,6 +23,11 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
     }
   }
 
+  const cancelEdit = () => {
+    setEditedTitle(todo.title)
+    setIsEditing(false)
+  }
+
   return (
     <li
       className={classnames({
@@ -55,6 +60,7 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
         value={editedTitle}
         onChange={(event) => setEditedTitle(event.target.value)}
         onKeyUp={completeEdit}
+        onBlur={cancelEdit}
       />
     </li>
   );
