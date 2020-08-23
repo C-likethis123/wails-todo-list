@@ -10,7 +10,7 @@ const ToDo = ({ todo, removeToDo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
   const editInputRef = useRef(null);
-  const editToDo = () => {
+  const allowEdits = () => {
     setIsEditing(true)
     setTimeout(() => editInputRef.current.focus(), 100)
   };
@@ -32,7 +32,7 @@ const ToDo = ({ todo, removeToDo }) => {
           className="toggle"
         />
         <label
-          onDoubleClick={() => editToDo()}
+          onDoubleClick={allowEdits}
         >
           {todo.title}
         </label>
