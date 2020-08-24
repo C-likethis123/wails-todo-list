@@ -75,11 +75,12 @@ function App() {
       // Add a ToDo to the todos list
       const trimmedValue = newToDo.trim();
       if (trimmedValue) {
-        const lastToDo = todos[todos.length - 1]
-        const lastId = lastToDo.id + 1
+        const itemId = todos.length === 0
+          ? 0
+          : (todos[todos.length - 1]).id + 1
         setTodos(
           todos.concat({
-            id: lastId,
+            id: itemId,
             title: trimmedValue,
             completed: false,
           })
@@ -94,10 +95,21 @@ function App() {
     setTodos(todos.filter(item => item.id !== todoId))
   }
 
-  const editToDo = (todo, editedTitle) => {
-    todo.title = editedTitle;
-    setTodos(todos)
+  const editToDo = (updatedToDo) => {
+    const editedTodos = todos.map(todo => {
+      // if this task has the same ID as the edited task
+        if (updatedToDo.id === todo.id) {
+          //
+          return updatedToDo
+        }
+        return todo;
+      });
+      setTodos(editedTodos);
   }
+
+  useEffect(() => {
+    console.log(todos)
+  }, [todos])
 
   return (
     <div>
