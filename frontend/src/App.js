@@ -65,9 +65,7 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
 };
 
 function App() {
-  const [todos, setTodos] = useState([
-    { id: 0, title: "My test to do item", completed: false },
-  ]);
+  const [todos, setTodos] = useState([]);
   const [newToDo, setNewToDo] = useState("");
 
   const detectEnterKeyPress = (event) => {
