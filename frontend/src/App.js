@@ -1,8 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "./assets/app.css";
 import "./assets/base.css";
-
 import classnames from "classnames";
 
 const ToDo = ({ todo, removeToDo, editToDo }) => {
@@ -19,7 +18,10 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
     if (event.key === 'Enter') {
       setIsEditing(false)
       const trimmedTitle = editedTitle.trim()
-      editToDo(todo, trimmedTitle)
+      const updatedToDo = {...todo}
+      updatedToDo.title = trimmedTitle
+      updatedToDo.completed = completed
+      editToDo(updatedToDo)
     }
   }
 
