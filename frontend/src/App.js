@@ -3,6 +3,7 @@ import "./App.css";
 import "./assets/app.css";
 import "./assets/base.css";
 import classnames from "classnames";
+import Wails from "@wailsapp/runtime"
 
 const ToDo = ({ todo, removeToDo, editToDo }) => {
   const [completed, setCompleted] = useState(todo.completed)
@@ -18,7 +19,7 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
     if (event.key === 'Enter') {
       setIsEditing(false)
       const trimmedTitle = editedTitle.trim()
-      const updatedToDo = {...todo}
+      const updatedToDo = { ...todo }
       updatedToDo.title = trimmedTitle
       updatedToDo.completed = completed
       editToDo(updatedToDo)
@@ -70,6 +71,12 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [newToDo, setNewToDo] = useState("");
 
+  useEffect(() => {
+    window.backend.loadList().then((list) => {
+      Wails.Log.Info("I got this list: " + list)
+    });
+  }, [])
+  
   const detectEnterKeyPress = (event) => {
     if (event.key === "Enter") {
       // Add a ToDo to the todos list
@@ -98,17 +105,17 @@ function App() {
   const editToDo = (updatedToDo) => {
     const editedTodos = todos.map(todo => {
       // if this task has the same ID as the edited task
-        if (updatedToDo.id === todo.id) {
-          //
-          return updatedToDo
-        }
-        return todo;
-      });
-      setTodos(editedTodos);
+      if (updatedToDo.id === todo.id) {
+        //
+        return updatedToDo
+      }
+      return todo;
+    });
+    setTodos(editedTodos);
   }
 
   useEffect(() => {
-    console.log(todos)
+    window.backend.saveList(JSON.stringify(todos));
   }, [todos])
 
   return (
