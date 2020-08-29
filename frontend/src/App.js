@@ -26,6 +26,13 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
     }
   }
 
+  const toggleCompleted = () => {
+    const completionStatus = !completed
+    setCompleted(completionStatus)
+    const updatedToDo = { ...todo, completed: completionStatus }
+    editToDo(updatedToDo)
+  }
+
   const cancelEdit = () => {
     setEditedTitle(todo.title)
     setIsEditing(false)
@@ -43,7 +50,7 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
         <input
           type="checkbox"
           checked={completed}
-          onChange={() => setCompleted(!completed)}
+          onChange={toggleCompleted}
           className="toggle"
         />
         <label onDoubleClick={allowEdits}>
@@ -76,7 +83,7 @@ function App() {
       Wails.Log.Info("I got this list: " + list)
     });
   }, [])
-  
+
   const detectEnterKeyPress = (event) => {
     if (event.key === "Enter") {
       // Add a ToDo to the todos list
@@ -115,7 +122,7 @@ function App() {
   }
 
   useEffect(() => {
-    window.backend.saveList(JSON.stringify(todos));
+    window.backend.saveList(JSON.stringify(todos, null, 2));
   }, [todos])
 
   return (
