@@ -77,11 +77,18 @@ const ToDo = ({ todo, removeToDo, editToDo }) => {
 function App() {
   const [todos, setTodos] = useState([]);
   const [newToDo, setNewToDo] = useState("");
+  const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
     window.backend.loadList().then((list) => {
-      Wails.Log.Info("I got this list: " + list)
-      setTodos(JSON.parse(list))
+      try {
+        Wails.Log.Info("I got this list: " + list)
+        setTodos(JSON.parse(list))
+      } catch (e) {
+        Wails.Log.Info("An error was thrown: " + e.message);
+        setErrorMessage("Unable to load todo list")
+        setTimeout(() => setErrorMessage(""), 3000)
+      }
     });
   }, [])
 
@@ -128,6 +135,7 @@ function App() {
 
   return (
     <div>
+      {errorMessage ? <h2>{errorMessage}</h2> : null}
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
