@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -24,8 +25,19 @@ func loadList() (string, error) {
 		return "", err
 	}
 	filename := path.Join(cwd, "mylist.json")
-	result, err := ioutil.ReadFile(filename)
-	return string(result), err
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		err = fmt.Errorf("Unable to open list: %s", filename)
+	}
+	var result = string(bytes)
+	return result, err
+}
+
+func errorOrSuccess(success bool) (string, error) {
+	if success {
+		return "I was successful", nil
+	}
+	return "", fmt.Errorf("i am an error")
 }
 
 func main() {
@@ -41,7 +53,9 @@ func main() {
 		CSS:    css,
 		Colour: "#131313",
 	})
-  app.Bind(saveList)
-  app.Bind(loadList)
+	
+	app.Bind(saveList)
+	app.Bind(loadList)
+	app.Bind(errorOrSuccess)
 	app.Run()
 }

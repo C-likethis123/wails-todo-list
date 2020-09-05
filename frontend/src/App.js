@@ -80,16 +80,21 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
-    window.backend.loadList().then((list) => {
-      try {
-        Wails.Log.Info("I got this list: " + list)
-        setTodos(JSON.parse(list))
-      } catch (e) {
-        Wails.Log.Info("An error was thrown: " + e.message);
-        setErrorMessage("Unable to load todo list")
+    window.backend.loadList()
+      .then((list) => {
+        try {
+          Wails.Log.Info("I got this list: " + list)
+          setTodos(JSON.parse(list))
+        } catch (e) {
+          Wails.Log.Info("An error was thrown: " + e.message);
+          setErrorMessage("Unable to load todo list")
+          setTimeout(() => setErrorMessage(""), 3000)
+        }
+      })
+      .catch(error => {
+        setErrorMessage(error)
         setTimeout(() => setErrorMessage(""), 3000)
-      }
-    });
+      });
   }, [])
 
   const detectEnterKeyPress = (event) => {
