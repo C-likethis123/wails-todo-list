@@ -81,6 +81,7 @@ function App() {
   useEffect(() => {
     window.backend.loadList().then((list) => {
       Wails.Log.Info("I got this list: " + list)
+      setTodos(JSON.parse(list))
     });
   }, [])
 
