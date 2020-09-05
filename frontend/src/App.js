@@ -80,7 +80,8 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
-    window.backend.loadList()
+    window.backend.Todos
+      .LoadList()
       .then((list) => {
         try {
           Wails.Log.Info("I got this list: " + list)
@@ -135,7 +136,8 @@ function App() {
   }
 
   useEffect(() => {
-    window.backend.saveList(JSON.stringify(todos, null, 2));
+    window.backend.Todos
+      .SaveList(JSON.stringify(todos, null, 2));
   }, [todos])
 
   return (
