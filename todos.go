@@ -5,14 +5,26 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+
+	"github.com/wailsapp/wails"
 )
 
 type Todos struct {
 	filename string
+	runtime  *wails.Runtime
+	logger   *wails.CustomLogger
+}
+
+func (t *Todos) WailsInit(runtime *wails.Runtime) error {
+	t.runtime = runtime
+	t.logger = t.runtime.Log.New("Todos")
+	t.logger.Info("I'm here")
+	return nil
 }
 
 // LoadList loads the list to mylist.json
 func (t *Todos) LoadList() (string, error) {
+	t.logger.Infof("Loading list from: %s", t.filename)
 	bytes, err := ioutil.ReadFile(t.filename)
 	if err != nil {
 		err = fmt.Errorf("Unable to open list: %s", t.filename)
@@ -22,6 +34,7 @@ func (t *Todos) LoadList() (string, error) {
 
 // SaveList saves the list to mylist.json
 func (t *Todos) SaveList(todos string) error {
+	t.logger.Infof("Saving list: %s", todos)
 	return ioutil.WriteFile(t.filename, []byte(todos), 0600)
 }
 

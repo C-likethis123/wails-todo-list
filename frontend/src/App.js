@@ -80,6 +80,14 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
+    Wails.Events.On("error", (message, number) => {
+      let result = number * 2;
+      setErrorMessage(`${message}: ${result}`)
+      setTimeout(() => {
+        setErrorMessage("")
+      }, 3000);
+    })
+
     window.backend.Todos
       .LoadList()
       .then((list) => {
