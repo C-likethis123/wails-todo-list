@@ -20,6 +20,10 @@ function App() {
     }
   }
 
+  const deleteToDo = (todoId) => {
+    setTodos(todos.filter(todo => todo.id !== todoId))
+  }
+
   return (
     <section className="todoapp">
       <h1>To Do List</h1>

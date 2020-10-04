@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from "classnames";
 
-function ToDoList({ todos }) {
+function ToDoList({ todos, deleteToDo }) {
   return (
     <ul className="todo-list">
       {todos.map(({ id, title, completed }) =>
@@ -16,6 +16,10 @@ function ToDoList({ todos }) {
               className="toggle"
             />
             <label>{title}</label>
+            <button
+              className="destroy"
+              onClick={() => deleteToDo(id)}
+            />
           </div>
         </li>)
       }
