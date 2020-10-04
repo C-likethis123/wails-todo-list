@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./App.css";
 import "./assets/app.css";
 import "./assets/base.css";
@@ -78,33 +78,42 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [newToDo, setNewToDo] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
+  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    Wails.Events.On("error", (message, number) => {
-      let result = number * 2;
-      setErrorMessage(`${message}: ${result}`)
-      setTimeout(() => {
-        setErrorMessage("")
-      }, 3000);
-    })
+  const setError = (errorMessage) => {
+    setErrorMessage(errorMessage)
+    setTimeout(() => {
+      setErrorMessage("")
+    }, 3000);
+  }
 
+  const loadList = useCallback(() => {
     window.backend.Todos
       .LoadList()
       .then((list) => {
         try {
           Wails.Log.Info("I got this list: " + list)
           setTodos(JSON.parse(list))
+          setLoading(false)
         } catch (e) {
           Wails.Log.Info("An error was thrown: " + e.message);
-          setErrorMessage("Unable to load todo list")
-          setTimeout(() => setErrorMessage(""), 3000)
+          setError("Unable to load todo list")
         }
       })
-      .catch(error => {
-        setErrorMessage(error)
-        setTimeout(() => setErrorMessage(""), 3000)
-      });
-  }, [])
+      .catch(error => setError(error))
+  }, [loading])
+
+//TODO: Debug why there's infinite renders
+  useEffect(() => {
+    Wails.Events.On("filemodified", loadList)
+
+    Wails.Events.On("error", (message, number) => {
+      let result = number * 2;
+      setError(`${message}: ${result}`)
+    })
+
+    loadList()
+  }, [loadList])
 
   const detectEnterKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -144,9 +153,12 @@ function App() {
   }
 
   useEffect(() => {
-    window.backend.Todos
-      .SaveList(JSON.stringify(todos, null, 2));
-  }, [todos])
+    if (loading) {
+      setLoading(false)
+      return
+    }
+    window.backend.Todos.SaveList(JSON.stringify(todos, null, 2));
+  }, [todos, loading])
 
   return (
     <div>
