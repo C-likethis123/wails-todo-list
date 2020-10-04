@@ -1,10 +1,14 @@
 import React from 'react';
+import classnames from "classnames";
 
 function ToDoList({ todos }) {
   return (
     <ul className="todo-list">
-      {todos.map(({ id, title }) =>
-        <li key={id} className="todo">
+      {todos.map(({ id, title, completed }) =>
+        <li
+          key={id}
+          className={classnames({ todo: true, completed })}
+        >
           <div className="view">
             <label>{title}</label>
           </div>
