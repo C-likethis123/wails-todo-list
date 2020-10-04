@@ -6,7 +6,7 @@ import AddToDo from './components/AddToDo'
 import ToDoList from './components/ToDoList'
 
 function App() {
-  const [todos, setTodos] = useState([{ id: 0, title: "My test to do item!", completed: true }]);
+  const [todos, setTodos] = useState([{ id: 0, title: "My test to do item!", completed: false }]);
   return (
     <section className="todoapp">
       <h1>To Do List</h1>

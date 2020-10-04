@@ -10,6 +10,11 @@ function ToDoList({ todos }) {
           className={classnames({ todo: true, completed })}
         >
           <div className="view">
+            <input
+              type="checkbox"
+              checked={completed}
+              className="toggle"
+            />
             <label>{title}</label>
           </div>
         </li>)
