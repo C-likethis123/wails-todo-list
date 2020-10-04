@@ -18,6 +18,12 @@ function ToDo({ id, title, completed, deleteToDo }) {
         onClick={() => deleteToDo(id)}
       />
     </div>
+    <input
+      className={classnames({ editing: !isEditing, edit: true })}
+      type="text"
+      value={editedTitle}
+      onChange={updateEditedTitle}
+    />
   </li>
 }
 
