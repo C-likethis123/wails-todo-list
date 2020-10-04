@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classnames from "classnames";
 
 function ToDo({ id, title, completed, deleteToDo }) {
+  const [editedTitle, setEditedTitle] = useState(title)
+  const updateEditedTitle = (event) => setEditedTitle(event.target.value)
+  const [isEditing, setIsEditing] = useState(false)
+  const allowEdits = () => setIsEditing(true)
+
   return <li
     key={id}
-    className={classnames({ todo: true, completed })}
+    className={classnames({ todo: true, completed, editing: isEditing })}
   >
     <div className="view">
       <input
@@ -12,7 +17,7 @@ function ToDo({ id, title, completed, deleteToDo }) {
         checked={completed}
         className="toggle"
       />
-      <label>{title}</label>
+      <label onDoubleClick={allowEdits}>{title}</label>
       <button
         className="destroy"
         onClick={() => deleteToDo(id)}
