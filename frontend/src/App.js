@@ -3,16 +3,17 @@ import "./App.css";
 import './assets/app.css';
 import './assets/base.css';
 import AddToDo from './components/AddToDo'
+import ToDoList from './components/ToDoList'
 import classnames from "classnames";
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(["hi", "bye"]);
   return (
-    <div className="todoapp">
+    <section className="todoapp">
       <h1>To Do List</h1>
       <AddToDo />
-      {/* <ToDos /> */}
-    </div>
+      <ToDoList todos={todos} />
+    </section>
   );
 }
 
