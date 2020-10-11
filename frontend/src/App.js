@@ -28,7 +28,7 @@ function App() {
     <section className="todoapp">
       <h1>To Do List</h1>
       <AddToDo addToDo={addToDo} />
-      <ToDoList todos={todos} />
+      <ToDoList todos={todos} deleteToDo={deleteToDo} />
     </section>
   );
 }
