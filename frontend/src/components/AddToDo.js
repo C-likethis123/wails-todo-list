@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useInputState from '../hooks/useInputState'
 
 function AddToDo(props) {
-  const [value, setValue] = useState('')
-  const updateValue = (event) => setValue(event.target.value)
+  const [inputValue, updateInput, clearInput] = useInputState('')
+  
   const addToDo = (event) => {
     event.preventDefault()
-    props.addToDo(value)
-    setValue('') // clear input
+    props.addToDo(inputValue)
+    clearInput('')
   }
   return (
     <form onSubmit={addToDo}>
@@ -14,8 +15,8 @@ function AddToDo(props) {
         className="new-todo"
         type="input"
         placeholder="Add a ToDo"
-        value={value}
-        onChange={updateValue}
+        value={inputValue}
+        onChange={updateInput}
       />
     </form>
   );
