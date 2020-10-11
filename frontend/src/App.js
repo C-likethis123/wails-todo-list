@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import "./App.css";
 import './assets/app.css';
 import './assets/base.css';
+import useErrorState from './hooks/useErrorState'
 import AddToDo from './components/AddToDo'
 import ToDoList from './components/ToDoList'
 
@@ -10,30 +11,21 @@ import Wails from '@wailsapp/runtime';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("")
+  const [error, displayError] = useErrorState()
   // load list
   useEffect(() => {
     Wails.Events.On("filemodified", () => {
-      setErrorMessage("Files modified")
-      setTimeout(() => {
-        setErrorMessage("")
-      }, 3000)
+      displayError("Files modified")
     })
-    Wails.Events.On("error", (message, number) => {
-      setErrorMessage(`${message}: ${number * 2}`)
-      setTimeout(() => setErrorMessage(""), 3000)
-    })
+
+    Wails.Events.On("error", (message, number) => displayError(`${message}: ${number * 2}`))
 
     window.backend.Todos
       .LoadList()
-      .then((list) => {
-        setTodos(JSON.parse(list))
-      })
-      .catch((err) => {
-        setErrorMessage("Unable to load todo list")
-        setTimeout(() => setErrorMessage(""), 3000)
-      });
-  }, [])
+      .then(list => setTodos(JSON.parse(list))
+      )
+      .catch(err => displayError("Unable to load todo list"));
+  },[])
 
   // save changes to list
   useEffect(() => {
@@ -63,7 +55,7 @@ function App() {
 
   return (
     <>
-      {errorMessage ? <h2>{errorMessage}</h2> : null}
+      {error ? <h2>{error}</h2> : null}
       <section className="todoapp">
         <h1>To Do List</h1>
         <AddToDo addToDo={addToDo} />
