@@ -14,16 +14,13 @@ function App() {
   const [error, displayError] = useErrorState()
   // load list
   useEffect(() => {
-    Wails.Events.On("filemodified", () => {
-      displayError("Files modified")
-    })
+    Wails.Events.On("filemodified", () => displayError("Files modified"))
 
     Wails.Events.On("error", (message, number) => displayError(`${message}: ${number * 2}`))
 
     window.backend.Todos
       .LoadList()
-      .then(list => setTodos(JSON.parse(list))
-      )
+      .then(list => setTodos(JSON.parse(list)))
       .catch(err => displayError("Unable to load todo list"));
   },[])
 
