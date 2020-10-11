@@ -18,6 +18,16 @@ func saveList(todos string) error {
 	return ioutil.WriteFile(filename, []byte(todos), 0600)
 }
 
+func loadList() (string, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	filename := path.Join(cwd, "mylist.json")
+	result, err := ioutil.ReadFile(filename)
+	return string(result), err
+}
+
 func main() {
 
 	js := mewn.String("./frontend/build/static/js/main.js")
@@ -33,5 +43,6 @@ func main() {
 	})
 
 	app.Bind(saveList)
+	app.Bind(loadList)
 	app.Run()
 }

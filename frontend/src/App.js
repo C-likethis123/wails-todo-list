@@ -9,6 +9,14 @@ import ToDoList from './components/ToDoList'
 function App() {
   const [todos, setTodos] = useState([]);
 
+  // load list
+  useEffect(() => {
+    window.backend.loadList().then((list) => {
+      setTodos(JSON.parse(list))
+    });
+  }, [])
+
+  // save changes to list
   useEffect(() => {
     window.backend.saveList(JSON.stringify(todos))
   }, [todos])
