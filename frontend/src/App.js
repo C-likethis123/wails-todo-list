@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import './assets/app.css';
@@ -12,23 +12,36 @@ import Wails from '@wailsapp/runtime';
 function App() {
   const [todos, setTodos] = useState([]);
   const [error, displayError] = useErrorState()
+  const [loading, setLoading] = useState(true)
+
+  const loadList = useCallback(() => {
+    window.backend.Todos
+      .LoadList()
+      .then(list => {
+        setTodos(JSON.parse(list))
+        setLoading(false)
+      })
+      .catch(err => displayError("Unable to load todo list"));
+  }, [displayError])
+
   // load list
   useEffect(() => {
-    Wails.Events.On("filemodified", () => displayError("Files modified"))
+    Wails.Events.On("filemodified", loadList)
 
     Wails.Events.On("error", (message, number) => displayError(`${message}: ${number * 2}`))
 
-    window.backend.Todos
-      .LoadList()
-      .then(list => setTodos(JSON.parse(list)))
-      .catch(err => displayError("Unable to load todo list"));
-  },[])
+    loadList()
+  }, [loadList, displayError])
 
   // save changes to list
   useEffect(() => {
+    if (loading) {
+      setLoading(false)
+      return
+    }
     window.backend.Todos
       .SaveList(JSON.stringify(todos, null, 2))
-  }, [todos])
+  }, [todos, loading])
 
   const addToDo = (todoTitle) => {
     const title = todoTitle.trim()
