@@ -8,12 +8,17 @@ import ToDoList from './components/ToDoList'
 
 function App() {
   const [todos, setTodos] = useState([]);
-
+  const [errorMessage, setErrorMessage] = useState("")
   // load list
   useEffect(() => {
-    window.backend.loadList().then((list) => {
-      setTodos(JSON.parse(list))
-    });
+    window.backend.loadList()
+      .then((list) => {
+        setTodos(JSON.parse(list))
+      })
+      .catch((err) => {
+        setErrorMessage("Unable to load todo list")
+        setTimeout(() => setErrorMessage(""), 3000)
+      });
   }, [])
 
   // save changes to list
@@ -42,11 +47,15 @@ function App() {
   }
 
   return (
-    <section className="todoapp">
-      <h1>To Do List</h1>
-      <AddToDo addToDo={addToDo} />
-      <ToDoList todos={todos} deleteToDo={deleteToDo} editToDo={editToDo} />
-    </section>
+    <>
+      {errorMessage ? <h2>{errorMessage}</h2> : null}
+      <section className="todoapp">
+        <h1>To Do List</h1>
+        <AddToDo addToDo={addToDo} />
+        <ToDoList todos={todos} deleteToDo={deleteToDo} editToDo={editToDo} />
+      </section>
+    </>
+
   );
 }
 
