@@ -6,11 +6,18 @@ import './assets/base.css';
 import AddToDo from './components/AddToDo'
 import ToDoList from './components/ToDoList'
 
+import Wails from '@wailsapp/runtime';
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [errorMessage, setErrorMessage] = useState("")
   // load list
   useEffect(() => {
+    Wails.Events.On("error", message => {
+      setErrorMessage(message)
+      setTimeout(() => setErrorMessage(""), 3000)
+    })
+
     window.backend.Todos
       .LoadList()
       .then((list) => {

@@ -30,6 +30,7 @@ func (t *Todos) LoadList() (string, error) {
 	if err != nil {
 		err = fmt.Errorf("Unable to open list: %s", t.filename)
 	}
+	t.runtime.Events.Emit("error", "I am a message from Go!", 1234)
 	return string(bytes), err
 }
 
