@@ -17,6 +17,10 @@ function ToDo({ id, title, completed, deleteToDo, editToDo }) {
     setIsEditing(false)
   }
 
+  const toggleCompleted = () => {
+    editToDo({id, title, completed: !completed})
+  }
+
   return <li
     key={id}
     className={classnames({ todo: true, completed, editing: isEditing })}
@@ -25,6 +29,7 @@ function ToDo({ id, title, completed, deleteToDo, editToDo }) {
       <input
         type="checkbox"
         checked={completed}
+        onChange={toggleCompleted}
         className="toggle"
       />
       <label onDoubleClick={allowEdits}>{title}</label>
