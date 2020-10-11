@@ -13,8 +13,14 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("")
   // load list
   useEffect(() => {
-    Wails.Events.On("error", message => {
-      setErrorMessage(message)
+    Wails.Events.On("filemodified", () => {
+      setErrorMessage("Files modified")
+      setTimeout(() => {
+        setErrorMessage("")
+      }, 3000)
+    })
+    Wails.Events.On("error", (message, number) => {
+      setErrorMessage(`${message}: ${number * 2}`)
       setTimeout(() => setErrorMessage(""), 3000)
     })
 
