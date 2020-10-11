@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import './assets/app.css';
@@ -8,6 +8,11 @@ import ToDoList from './components/ToDoList'
 
 function App() {
   const [todos, setTodos] = useState([{ id: 0, title: "My test to do item!", completed: false }]);
+  
+  useEffect(() => {
+    console.log(todos)
+  }, [todos])
+
   const addToDo = (todoTitle) => {
     const title = todoTitle.trim()
     if (title) {
