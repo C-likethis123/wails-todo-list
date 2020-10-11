@@ -7,10 +7,10 @@ import AddToDo from './components/AddToDo'
 import ToDoList from './components/ToDoList'
 
 function App() {
-  const [todos, setTodos] = useState([{ id: 0, title: "My test to do item!", completed: false }]);
-  
+  const [todos, setTodos] = useState([]);
+
   useEffect(() => {
-    console.log(todos)
+    window.backend.saveList(JSON.stringify(todos))
   }, [todos])
 
   const addToDo = (todoTitle) => {
