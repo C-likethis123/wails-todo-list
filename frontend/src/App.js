@@ -24,11 +24,15 @@ function App() {
     setTodos(todos.filter(todo => todo.id !== todoId))
   }
 
+  const editToDo = (editedToDo) => {
+    setTodos(todos.map(todo => todo.id === editedToDo.id ? editedToDo : todo))
+  }
+
   return (
     <section className="todoapp">
       <h1>To Do List</h1>
       <AddToDo addToDo={addToDo} />
-      <ToDoList todos={todos} deleteToDo={deleteToDo} />
+      <ToDoList todos={todos} deleteToDo={deleteToDo} editToDo={editToDo} />
     </section>
   );
 }
