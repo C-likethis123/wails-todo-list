@@ -18,7 +18,7 @@ function App() {
 
   // save changes to list
   useEffect(() => {
-    window.backend.saveList(JSON.stringify(todos))
+    window.backend.saveList(JSON.stringify(todos, null, 2))
   }, [todos])
 
   const addToDo = (todoTitle) => {
