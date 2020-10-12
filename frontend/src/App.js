@@ -7,16 +7,18 @@ import './assets/base.css';
 import AddToDo from './components/AddToDo'
 import ToDoList from './components/ToDoList'
 
+import useErrorState from './hooks/useErrorState'
 // import Wails from '@wailsapp/runtime';
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [error, displayError] = useErrorState()
 
   // load list
   useEffect(() => {
     window.backend.loadList()
       .then((list) => setTodos(JSON.parse(list)))
-      .catch(err => console.log("An error occured"))
+      .catch(err => displayError("An error occurred"))
   }, [])
 
   // watch list
@@ -46,6 +48,7 @@ function App() {
 
   return (
     <>
+      { error !== '' && <h2>{error}</h2>}
       <section className="todoapp">
         <h1>To Do List</h1>
         <AddToDo addToDo={addToDo} />
