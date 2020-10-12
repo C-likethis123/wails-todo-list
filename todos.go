@@ -5,10 +5,13 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+
+	"github.com/wailsapp/wails"
 )
 
 type Todos struct {
 	filename string
+	runtime  *wails.Runtime
 }
 
 // NewTodos attempts to create a new Todo list
@@ -36,4 +39,11 @@ func (t *Todos) LoadList() (string, error) {
 
 func (t *Todos) SaveList(todos string) error {
 	return ioutil.WriteFile(t.filename, []byte(todos), 0600)
+}
+
+func (t *Todos) WailsInit(runtime *wails.Runtime) error {
+	t.runtime = runtime
+	myLog := t.runtime.Log.New("Todos")
+	myLog.Info("I'm here")
+	return nil
 }
