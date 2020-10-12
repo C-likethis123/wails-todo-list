@@ -12,6 +12,16 @@ import Wails from '@wailsapp/runtime';
 function App() {
   const [todos, setTodos] = useState([]);
 
+  // load list
+  useEffect(() => window.backend.loadList()
+    .then((list) => setTodos(JSON.parse(list))),
+    [])
+
+  // watch list
+  useEffect(() => {
+    window.backend.saveList(JSON.stringify(todos))
+  }, [todos])
+
   const addToDo = (todoTitle) => {
     const title = todoTitle.trim()
     if (title) {
