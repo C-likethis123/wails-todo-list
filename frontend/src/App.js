@@ -19,6 +19,7 @@ function App() {
     window.backend.loadList()
       .then((list) => setTodos(JSON.parse(list)))
       .catch(err => displayError(err))
+    // eslint-disable-next-line
   }, [])
 
   // watch list
