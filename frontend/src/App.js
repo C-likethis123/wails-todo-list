@@ -8,7 +8,7 @@ import AddToDo from './components/AddToDo'
 import ToDoList from './components/ToDoList'
 
 import useErrorState from './hooks/useErrorState'
-// import Wails from '@wailsapp/runtime';
+import Wails from '@wailsapp/runtime';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -16,6 +16,9 @@ function App() {
 
   // load list
   useEffect(() => {
+    Wails.Events.On("error", message => {
+      displayError(message)
+    })
     window.backend.Todos.LoadList()
       .then((list) => setTodos(JSON.parse(list)))
       .catch(err => displayError(err))
