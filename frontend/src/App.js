@@ -14,14 +14,21 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [error, displayError] = useErrorState()
 
-  // load list
-  useEffect(() => {
-    Wails.Events.On("error", (message, num) => {
-      displayError(`${message}: ${num * 2}`)
-    })
+  const loadList = () => {
     window.backend.Todos.LoadList()
       .then((list) => setTodos(JSON.parse(list)))
       .catch(err => displayError(err))
+  }
+  // load list
+  useEffect(() => {
+    Wails.Events.On("filemodified", () => {
+      displayError("Files modified")
+    })
+
+    Wails.Events.On("error", (message, num) => {
+      displayError(`${message}: ${num * 2}`)
+    })
+    loadList()
     // eslint-disable-next-line
   }, [])
 
