@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -24,8 +25,12 @@ func loadList() (string, error) {
 		return "", err
 	}
 	filename := path.Join(cwd, "mylist.json")
-	result, err := ioutil.ReadFile(filename)
-	return string(result), err
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		err = fmt.Errorf("Unable to open list: %s", filename)
+	}
+	var result = string(bytes)
+	return result, err
 }
 
 func main() {

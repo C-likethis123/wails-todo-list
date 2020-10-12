@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     window.backend.loadList()
       .then((list) => setTodos(JSON.parse(list)))
-      .catch(err => displayError("An error occurred"))
+      .catch(err => displayError(err))
   }, [])
 
   // watch list
