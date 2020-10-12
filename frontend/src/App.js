@@ -13,17 +13,17 @@ import Wails from '@wailsapp/runtime';
 function App() {
   const [todos, setTodos] = useState([]);
   const [error, displayError] = useErrorState()
+  const [loading, setLoading] = useState(false)
 
   const loadList = () => {
     window.backend.Todos.LoadList()
       .then((list) => setTodos(JSON.parse(list)))
+      .then(() => setLoading(true))
       .catch(err => displayError(err))
   }
   // load list
   useEffect(() => {
-    Wails.Events.On("filemodified", () => {
-      displayError("Files modified")
-    })
+    Wails.Events.On("filemodified", loadList)
 
     Wails.Events.On("error", (message, num) => {
       displayError(`${message}: ${num * 2}`)
@@ -34,7 +34,11 @@ function App() {
 
   // watch list
   useEffect(() => {
-    window.backend.Todos.SaveList(JSON.stringify(todos))
+    if (loading) {
+      setLoading(false)
+      return
+    }
+    window.backend.Todos.SaveList(JSON.stringify(todos, null, 2))
   }, [todos])
 
   const addToDo = (todoTitle) => {
