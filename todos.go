@@ -26,7 +26,7 @@ func NewTodos() (*Todos, error) {
 	return result, nil
 }
 
-func (t *Todos) loadList() (string, error) {
+func (t *Todos) LoadList() (string, error) {
 	bytes, err := ioutil.ReadFile(t.filename)
 	if err != nil {
 		err = fmt.Errorf("Unable to open list: %s", t.filename)
@@ -34,6 +34,6 @@ func (t *Todos) loadList() (string, error) {
 	return string(bytes), err
 }
 
-func (t *Todos) saveList(todos string) error {
+func (t *Todos) SaveList(todos string) error {
 	return ioutil.WriteFile(t.filename, []byte(todos), 0600)
 }

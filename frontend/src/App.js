@@ -16,7 +16,7 @@ function App() {
 
   // load list
   useEffect(() => {
-    window.backend.loadList()
+    window.backend.Todos.LoadList()
       .then((list) => setTodos(JSON.parse(list)))
       .catch(err => displayError(err))
     // eslint-disable-next-line
@@ -24,7 +24,7 @@ function App() {
 
   // watch list
   useEffect(() => {
-    window.backend.saveList(JSON.stringify(todos))
+    window.backend.Todos.SaveList(JSON.stringify(todos))
   }, [todos])
 
   const addToDo = (todoTitle) => {
