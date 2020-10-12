@@ -16,8 +16,8 @@ function App() {
 
   // load list
   useEffect(() => {
-    Wails.Events.On("error", message => {
-      displayError(message)
+    Wails.Events.On("error", (message, num) => {
+      displayError(`${message}: ${num * 2}`)
     })
     window.backend.Todos.LoadList()
       .then((list) => setTodos(JSON.parse(list)))
