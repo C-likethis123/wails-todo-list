@@ -1,6 +1,6 @@
 import React from 'react';
 
-function SaveToDoList({ saveAs }) {
+function Options({ saveAs, loadNewList }) {
   return (
     <div className="buttons">
       <ul className="filters">
@@ -9,9 +9,14 @@ function SaveToDoList({ saveAs }) {
             Save List
         </a>
         </li>
+        <li>
+          <a onClick={loadNewList}>
+            Load List
+          </a>
+        </li>
       </ul>
     </div>
   );
 }
 
-export default SaveToDoList;
+export default Options;
