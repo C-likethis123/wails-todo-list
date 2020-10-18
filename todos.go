@@ -16,13 +16,6 @@ type Todos struct {
 	logger   *wails.CustomLogger
 }
 
-func (t *Todos) WailsInit(runtime *wails.Runtime) error {
-	t.runtime = runtime
-	t.logger = t.runtime.Log.New("Todos")
-	t.logger.Info("I'm here")
-	return t.startWatcher()
-}
-
 // LoadList loads the list to mylist.json
 func (t *Todos) LoadList() (string, error) {
 	t.logger.Infof("Loading list from: %s", t.filename)
@@ -54,6 +47,38 @@ func NewTodos() (*Todos, error) {
 	result.filename = filename
 	// Return it
 	return result, nil
+}
+
+func (t *Todos) SaveAs(todos string) error {
+	filename := t.runtime.Dialog.SelectSaveFile()
+	t.logger.Info("Save As: " + filename)
+	return nil
+}
+
+func (t *Todos) WailsInit(runtime *wails.Runtime) error {
+	t.runtime = runtime
+	t.logger = t.runtime.Log.New("Todos")
+	t.logger.Info("I'm here")
+
+	// Set the default filename to $HOMEDIR/mylist.json
+	homedir, err := runtime.FileSystem.HomeDir()
+	if err != nil {
+		return err
+	}
+	t.filename = path.Join(homedir, "mylist.json")
+
+	t.ensureFileExists()
+	return t.startWatcher()
+}
+
+func (t *Todos) ensureFileExists() {
+	// Check status of file
+	_, err := os.Stat(t.filename)
+	// If it doesn't exist
+	if os.IsNotExist(err) {
+		// Create it with a blank list
+		ioutil.WriteFile(t.filename, []byte("[]"), 0600)
+	}
 }
 
 func (t *Todos) startWatcher() error {

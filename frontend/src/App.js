@@ -8,6 +8,7 @@ import AddToDo from './components/AddToDo'
 import ToDoList from './components/ToDoList'
 
 import Wails from '@wailsapp/runtime';
+import SaveToDoList from "./components/SaveToDoList";
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -63,11 +64,14 @@ function App() {
     setTodos(todos.map(todo => todo.id === editedToDo.id ? editedToDo : todo))
   }
 
+  const saveAs = () => window.backend.Todos.SaveAs(JSON.stringify(todos, null, 2))
+
   return (
     <>
       {error ? <h2>{error}</h2> : null}
       <section className="todoapp">
         <h1>To Do List</h1>
+        <SaveToDoList saveAs={saveAs} />
         <AddToDo addToDo={addToDo} />
         <ToDoList todos={todos} deleteToDo={deleteToDo} editToDo={editToDo} />
       </section>
