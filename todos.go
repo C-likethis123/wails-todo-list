@@ -52,6 +52,8 @@ func NewTodos() (*Todos, error) {
 func (t *Todos) SaveAs(todos string) error {
 	filename := t.runtime.Dialog.SelectSaveFile()
 	t.logger.Info("Save As: " + filename)
+	t.filename = filename
+	t.SaveList(todos)
 	return nil
 }
 
