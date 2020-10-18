@@ -8,7 +8,7 @@ import AddToDo from './components/AddToDo'
 import ToDoList from './components/ToDoList'
 
 import Wails from '@wailsapp/runtime';
-import SaveToDoList from "./components/SaveToDoList";
+import Options from "./components/Options";
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -44,6 +44,8 @@ function App() {
       .SaveList(JSON.stringify(todos, null, 2))
   }, [todos])
 
+  const loadNewList = () => window.backend.Todos.LoadNewList()
+
   const addToDo = (todoTitle) => {
     const title = todoTitle.trim()
     if (title) {
@@ -71,7 +73,7 @@ function App() {
       {error ? <h2>{error}</h2> : null}
       <section className="todoapp">
         <h1>To Do List</h1>
-        <SaveToDoList saveAs={saveAs} />
+        <Options saveAs={saveAs} loadNewList={loadNewList} />
         <AddToDo addToDo={addToDo} />
         <ToDoList todos={todos} deleteToDo={deleteToDo} editToDo={editToDo} />
       </section>

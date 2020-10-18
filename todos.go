@@ -107,6 +107,14 @@ func (t *Todos) setFilename(filename string) error {
 	return nil
 }
 
+func (t *Todos) LoadNewList() {
+	filename := t.runtime.Dialog.SelectFile()
+	if len(filename) > 0 {
+		t.setFilename(filename)
+		t.runtime.Events.Emit("filemodified")
+	}
+}
+
 func (t *Todos) saveListByName(todos string, filename string) error {
 	return ioutil.WriteFile(filename, []byte(todos), 0600)
 }
