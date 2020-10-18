@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import './assets/app.css';
@@ -15,7 +15,7 @@ function App() {
   const [error, displayError] = useErrorState()
   const [loading, setLoading] = useState(true)
 
-  const loadList = useCallback(() => {
+  const loadList = () => {
     window.backend.Todos
       .LoadList()
       .then(list => {
@@ -23,14 +23,12 @@ function App() {
         setLoading(true)
       })
       .catch(err => displayError("Unable to load todo list"));
-  }, [displayError])
+  }
 
   // load list
   useEffect(() => {
     Wails.Events.On("filemodified", loadList)
-
     Wails.Events.On("error", (message, number) => displayError(`${message}: ${number * 2}`))
-
     loadList()
   }, [])
 
@@ -58,13 +56,9 @@ function App() {
     }
   }
 
-  const deleteToDo = (todoId) => {
-    setTodos(todos.filter(todo => todo.id !== todoId))
-  }
+  const deleteToDo = (todoId) => setTodos(todos.filter(todo => todo.id !== todoId))
 
-  const editToDo = (editedToDo) => {
-    setTodos(todos.map(todo => todo.id === editedToDo.id ? editedToDo : todo))
-  }
+  const editToDo = (editedToDo) => setTodos(todos.map(todo => todo.id === editedToDo.id ? editedToDo : todo))
 
   const saveAs = () => window.backend.Todos.SaveAs(JSON.stringify(todos, null, 2))
 
@@ -72,9 +66,11 @@ function App() {
     <>
       {error ? <h2>{error}</h2> : null}
       <section className="todoapp">
-        <h1>To Do List</h1>
-        <Options saveAs={saveAs} loadNewList={loadNewList} />
-        <AddToDo addToDo={addToDo} />
+        <header className="header">
+          <h1>To Do List</h1>
+          <Options saveAs={saveAs} loadNewList={loadNewList} />
+          <AddToDo addToDo={addToDo} />
+        </header>
         <ToDoList todos={todos} deleteToDo={deleteToDo} editToDo={editToDo} />
       </section>
     </>
