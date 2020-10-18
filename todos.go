@@ -14,6 +14,7 @@ type Todos struct {
 	filename string
 	runtime  *wails.Runtime
 	logger   *wails.CustomLogger
+	watcher  *fsnotify.Watcher
 }
 
 // LoadList loads the list to mylist.json
@@ -29,7 +30,7 @@ func (t *Todos) LoadList() (string, error) {
 // SaveList saves the list to mylist.json
 func (t *Todos) SaveList(todos string) error {
 	t.logger.Infof("Saving list: %s", todos)
-	return ioutil.WriteFile(t.filename, []byte(todos), 0600)
+	return t.saveListByName(todos, t.filename)
 }
 
 // NewTodos attempts to create a new Todo list
@@ -52,9 +53,11 @@ func NewTodos() (*Todos, error) {
 func (t *Todos) SaveAs(todos string) error {
 	filename := t.runtime.Dialog.SelectSaveFile()
 	t.logger.Info("Save As: " + filename)
-	t.filename = filename
-	t.SaveList(todos)
-	return nil
+	err := t.saveListByName(todos, filename)
+	if err != nil {
+		return err
+	}
+	return t.setFilename(filename)
 }
 
 func (t *Todos) WailsInit(runtime *wails.Runtime) error {
@@ -68,7 +71,7 @@ func (t *Todos) WailsInit(runtime *wails.Runtime) error {
 		return err
 	}
 	t.filename = path.Join(homedir, "mylist.json")
-
+	t.runtime.Window.SetTitle(t.filename)
 	t.ensureFileExists()
 	return t.startWatcher()
 }
@@ -83,9 +86,35 @@ func (t *Todos) ensureFileExists() {
 	}
 }
 
+func (t *Todos) setFilename(filename string) error {
+	var err error
+	// Stop watching the current file and return any error
+	err = t.watcher.Remove(t.filename)
+	if err != nil {
+		return err
+	}
+
+	// Set the filename
+	t.filename = filename
+
+	// Add the new file to the watcher and return any errors
+	err = t.watcher.Add(filename)
+	if err != nil {
+		return err
+	}
+	t.logger.Info("Now watching: " + filename)
+	t.runtime.Window.SetTitle(t.filename)
+	return nil
+}
+
+func (t *Todos) saveListByName(todos string, filename string) error {
+	return ioutil.WriteFile(filename, []byte(todos), 0600)
+}
+
 func (t *Todos) startWatcher() error {
 	t.logger.Info("Starting Watcher")
 	watcher, err := fsnotify.NewWatcher()
+	t.watcher = watcher
 	if err != nil {
 		return err
 	}
