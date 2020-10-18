@@ -20,7 +20,7 @@ function App() {
       .LoadList()
       .then(list => {
         setTodos(JSON.parse(list))
-        setLoading(false)
+        setLoading(true)
       })
       .catch(err => displayError("Unable to load todo list"));
   }, [displayError])
@@ -32,7 +32,7 @@ function App() {
     Wails.Events.On("error", (message, number) => displayError(`${message}: ${number * 2}`))
 
     loadList()
-  }, [loadList, displayError])
+  }, [])
 
   // save changes to list
   useEffect(() => {
@@ -42,7 +42,7 @@ function App() {
     }
     window.backend.Todos
       .SaveList(JSON.stringify(todos, null, 2))
-  }, [todos, loading])
+  }, [todos])
 
   const addToDo = (todoTitle) => {
     const title = todoTitle.trim()
